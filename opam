@@ -21,4 +21,5 @@ depends: [
   "xenstore"
   "xenstore_transport"
   "xen-api-client"
+  "xen-testvm-idl"
 ]
