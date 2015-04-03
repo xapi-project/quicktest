@@ -11,6 +11,6 @@ Executable client
   CompiledObject: best
   Path: src
   MainIs: quicktest.ml
-  BuildDepends: cmdliner, io-page.unix, io-page, xen-evtchn, xen-evtchn.unix, xen-evtchn.unix.activations, xen-gnt.unix, xen-gnt, xenstore, xenstore.client, xenstore_transport, xenstore_transport.lwt, lwt, mirage-types.lwt, vchan, testvmlib, xen-api-client, xen-api-client.lwt
+  BuildDepends: cmdliner, io-page.unix, io-page, xen-evtchn, xen-evtchn.unix, xen-evtchn.unix.activations, xen-gnt.unix, xen-gnt, xenstore, xenstore.client, xenstore_transport, xenstore_transport.lwt, lwt, mirage-types.lwt, vchan, vchan.lwt, testvmlib, xen-api-client, xen-api-client.lwt
 
 
