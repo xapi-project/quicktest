@@ -3,12 +3,7 @@
 open Cmdliner
 
 module Xs = Xs_client_lwt.Client(Xs_transport_lwt_unix_client)
-module V = struct
-  include Vchan.Make(Unix_activations)(Xs)
-  type 'a io = 'a Lwt.t
-  type buffer = Cstruct.t
-  type flow = t
-end
+module V = Vchan.Endpoint.Make(Events_lwt_unix)(Memory_lwt_unix)(Vchan.Xenstore.Make(Xs))
 module Vchan_http = Vchan_http.Make(V)
 module RpcM = Vchan_http.RpcM
 module Client = Test_interface.ClientM(RpcM)
@@ -16,7 +11,9 @@ module X = Xen_api_lwt_unix
 
 let (|>) x y = y x
 
-let evtchn_h = Eventchn.init ()
+let port = match Vchan.Port.of_string "testvm" with
+| `Ok x -> x
+| `Error x -> failwith x
 
 let rpc =
   let uri = "file:///var/lib/xcp/xapi" in
@@ -58,7 +55,7 @@ let test1 rpc session_id =
   lwt () = X.VM.start ~rpc ~session_id ~vm ~start_paused:false ~force:false in
   lwt domid' = X.VM.get_domid ~rpc ~session_id ~self:vm in
   let domid = Int64.to_int domid' in
-  lwt flow = V.client ~evtchn_h ~domid ~xs_path:(Printf.sprintf "/local/domain/%d/data/vchan" domid) in
+  lwt flow = V.client ~domid ~port () in
   RpcM.vch := Some (Vchan_http.openflow flow);
   lwt () = Client.shutdown () in
   V.close flow;
