@@ -22,6 +22,9 @@ doc: setup.data setup.bin
 install: setup.bin
 	echo "install is manual"
 
+uninstall: setup.bin
+	echo "uninstall is manual"
+
 reinstall: setup.bin
 	echo "reinstall is manual"
 
